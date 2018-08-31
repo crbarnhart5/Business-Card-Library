@@ -12,10 +12,10 @@ public class ProgramController {
 	private static void InteractWithUser() {
 		Scanner sc = new Scanner(System.in);
 		String initialMessage = "Please enter number of option:\n" 
-				+ "1: View contact info" 
-				+ "2: Add contact info"
-				+ "3: Update contact info" 
-				+ "4: Delete contact info" 
+				+ "1: View contact info\n" 
+				+ "2: Add contact info\n"
+				+ "3: Update contact info\n" 
+				+ "4: Delete contact info\n" 
 				+ "5: Exit";
 
 		do {
@@ -48,10 +48,10 @@ public class ProgramController {
 
 	private static void View() {
 		Scanner sc = new Scanner(System.in);
-		String viewMessage = "Please enter the number of what you would like to search by:" 
-				+ "1: First name"
-				+ "2: Last name" 
-				+ "3: Company" 
+		String viewMessage = "View: Please enter the number of what you would like to search by:\n" 
+				+ "1: First name\n"
+				+ "2: Last name\n" 
+				+ "3: Company\n" 
 				+ "4: Exit";
 		do {
 			System.out.println(viewMessage);
@@ -76,6 +76,7 @@ public class ProgramController {
 	private static void Add() {
 		Scanner sc = new Scanner(System.in);
 		
+		System.out.println("Add:");
 		System.out.println("Please enter the contact's first name.");
 		String fName = sc.nextLine();
 		System.out.println("Please enter the contact's last name");
@@ -91,7 +92,41 @@ public class ProgramController {
 	}
 
 	private static void Update() {
-
+		Scanner sc = new Scanner(System.in);
+		String viewMessage = "Update: Please enter the number of what you would like to search by:\n" 
+				+ "1: First name\n"
+				+ "2: Last name\n" 
+				+ "3: Company\n" 
+				+ "4: Exit";
+		
+		do {
+			System.out.println(viewMessage);
+			String choice = sc.nextLine();
+			switch (choice) {
+			case "1":
+				break;
+			case "2":
+				break;
+			case "3":
+				break;
+			case "4": sc.close();
+				return;
+			default:
+				System.out.println("Invalid choice entered");
+				break;
+			}
+		
+		//Iterate through options matching search
+		
+		//Ask what field they would like to update, iterate through available options
+		
+		System.out.println("What would you like to replace the field with?");
+		String replacement = sc.nextLine();
+		
+		//Update field
+		
+		System.out.println("Update completed");
+		} while (true);
 	}
 
 	private static void Delete() {
