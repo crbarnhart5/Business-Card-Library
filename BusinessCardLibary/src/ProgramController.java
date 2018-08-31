@@ -115,7 +115,10 @@ public class ProgramController {
 				System.out.println("Invalid choice entered");
 				break;
 			}
-		
+			
+		System.out.println("Please enter search term");
+		String term = sc.nextLine();
+			
 		//Iterate through options matching search
 		
 		//Ask what field they would like to update, iterate through available options
@@ -130,7 +133,40 @@ public class ProgramController {
 	}
 
 	private static void Delete() {
-
+		Scanner sc = new Scanner(System.in);
+		String viewMessage = "Delete: Please enter the number of what you would like to search by:\n" 
+				+ "1: First name\n"
+				+ "2: Last name\n" 
+				+ "3: Company\n" 
+				+ "4: Exit";
+		
+		do {
+			System.out.println(viewMessage);
+			String choice = sc.nextLine();
+			switch (choice) {
+			case "1":
+				break;
+			case "2":
+				break;
+			case "3":
+				break;
+			case "4": sc.close();
+				return;
+			default:
+				System.out.println("Invalid choice entered");
+				break;
+			}
+			
+			System.out.println("Please enter search term");
+			String term = sc.nextLine();
+			
+			//List results asking which to delete
+			
+			//Call DBController delete method
+			
+			System.out.println("Contact deleted");
+			
+		} while (true);
 	}
 
 	private static BufferedImage TakePhoto() {
