@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ProgramController {
@@ -73,7 +74,20 @@ public class ProgramController {
 	}
 
 	private static void Add() {
-
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("Please enter the contact's first name.");
+		String fName = sc.nextLine();
+		System.out.println("Please enter the contact's last name");
+		String lName = sc.nextLine();
+		System.out.println("Please enter the contact's company");
+		String company = sc.nextLine();
+		System.out.println("Please enter the contact's phone number, press enter if none");
+		String number = sc.nextLine();
+		System.out.println("Prepare to take photo of business card. Press enter when ready");
+		sc.nextLine();
+		BufferedImage businessCard = TakePhoto();
+		
 	}
 
 	private static void Update() {
