@@ -89,6 +89,7 @@ public class ProgramController {
 		sc.nextLine();
 		BufferedImage businessCard = TakePhoto();
 		
+		//Call DBController add method
 	}
 
 	private static void Update() {
@@ -172,5 +173,20 @@ public class ProgramController {
 	private static BufferedImage TakePhoto() {
 
 		return null;
+	}
+	
+	private static void Tester() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("1: View \n2: Add");
+		String choice = sc.nextLine();
+		switch(choice) {
+		case "1":
+			break;
+		case "2":
+			break;
+		default: System.out.println("Didn't work");
+		Tester();
+		break;
+		}
 	}
 }
