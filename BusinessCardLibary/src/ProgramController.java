@@ -59,7 +59,6 @@ public class ProgramController {
 	}
 
 	private static void view() {
-		DB database;
 		DBObject query = new BasicDBObject();
 		boolean exit = false;
 		String viewMessage = "View: Please enter the number of what you would like to search by:\n" + "1: First name\n"
@@ -79,7 +78,7 @@ public class ProgramController {
 					System.out.print(", Company: " + result.get("company"));
 					System.out.println(", Phone number: " + result.get("number"));
 					InteractWithUser();
-					
+
 				} catch (NullPointerException e) {
 					System.out.println("No result found");
 					view();
@@ -97,7 +96,7 @@ public class ProgramController {
 					System.out.print(", Company: " + result.get("company"));
 					System.out.println(", Phone number: " + result.get("number"));
 					InteractWithUser();
-					
+
 				} catch (NullPointerException e) {
 					System.out.println("No result found");
 					view();
@@ -114,7 +113,7 @@ public class ProgramController {
 					System.out.print(", Company: " + result.get("company"));
 					System.out.println(", Phone number: " + result.get("number"));
 					InteractWithUser();
-					
+
 				} catch (NullPointerException e) {
 					System.out.println("No result found");
 					view();
@@ -131,7 +130,7 @@ public class ProgramController {
 					System.out.print(", Company: " + result.get("company"));
 					System.out.println(", Phone number: " + result.get("number"));
 					InteractWithUser();
-					
+
 				} catch (NullPointerException e) {
 					System.out.println("No result found");
 					view();
@@ -148,8 +147,7 @@ public class ProgramController {
 	}
 
 	private static void add() {
-		// DECIDE IF WHILE(TRUE) OR CALL METHOD AGAIN
-		boolean exit = false;
+		DBObject query = new BasicDBObject();
 
 		System.out.println("Add:");
 		System.out.println("Please enter the contact's first name.");
@@ -160,17 +158,19 @@ public class ProgramController {
 		String company = sc.nextLine();
 		System.out.println("Please enter the contact's phone number, press enter if none");
 		String number = sc.nextLine();
-		System.out.println("Prepare to take photo of business card. Press enter when ready");
-		sc.nextLine();
-		// BufferedImage businessCard = TakePhoto();
-		System.out.println("Buffered image taken");
-		System.out.println("add called");
+
+		query.put("first_name", fName);
+		query.put("last_name", lName);
+		query.put("company", company);
+		if(number != null && number.length() > 0) {
+			query.put("number",number);
+		}
+		cards.insert(query);
 		InteractWithUser();
-		// Call DBController add method
 	}
 
 	private static void update() {
-		//ADD NUMBER TO ALL
+		// ADD NUMBER TO ALL
 		boolean exit = false;
 		String viewMessage = "Update: Please enter the number of what you would like to search by:\n"
 				+ "1: First name\n" + "2: Last name\n" + "3: Company\n" + "4: Exit";
