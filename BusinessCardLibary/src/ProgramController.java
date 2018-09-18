@@ -102,7 +102,20 @@ public class ProgramController {
 				}
 				break;
 			case "3":
-				System.out.println("Third name chosen");
+				System.out.println("Please enter the company of the contact");
+				String company = sc.nextLine();
+				query.put("company", company);
+				try {
+					DBObject result = cards.findOne(query);
+					System.out.print("First Name: " + result.get("first_name"));
+					System.out.println("Last Name: " + result.get("last_name"));
+					System.out.println(", telephone number: " + result.get("number"));
+					InteractWithUser();
+					
+				} catch (NullPointerException e) {
+					System.out.println("No result found");
+					view();
+				}
 				break;
 			case "4":
 				sc.close();
