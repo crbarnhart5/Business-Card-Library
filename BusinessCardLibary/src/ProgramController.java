@@ -12,8 +12,10 @@ import com.mongodb.MongoClient;
 
 public class ProgramController {
 	static DBCollection cards;
+	static Scanner sc;
 
 	public static void main(String[] args) {
+		sc = new Scanner(System.in);
 		MongoClient mongoClient = new MongoClient();
 		DB database = mongoClient.getDB("contacts");
 		cards = database.getCollection("cards");
@@ -23,7 +25,6 @@ public class ProgramController {
 	}
 
 	private static void InteractWithUser() {
-		Scanner sc = new Scanner(System.in);
 		boolean exit = false;
 		String initialMessage = "Please enter number of option:\n" + "1: View contact info\n" + "2: Add contact info\n"
 				+ "3: Update contact info\n" + "4: Delete contact info\n" + "5: Exit";
@@ -60,10 +61,9 @@ public class ProgramController {
 	private static void view() {
 		DB database;
 		DBObject query = new BasicDBObject();
-		Scanner sc = new Scanner(System.in);
 		boolean exit = false;
 		String viewMessage = "View: Please enter the number of what you would like to search by:\n" + "1: First name\n"
-				+ "2: Last name\n" + "3: Company\n" + "4: Exit";
+				+ "2: Last name\n3: Company\n4: Phone number\n5: Exit";
 		do {
 			System.out.println(viewMessage);
 			String choice = sc.nextLine();
@@ -74,9 +74,10 @@ public class ProgramController {
 				query.put("first_name", name);
 				try {
 					DBObject result = cards.findOne(query);
-					System.out.print("Last Name: " + result.get("last_name"));
+					System.out.print("First Name: " + result.get("first_name"));
+					System.out.print(", Last Name: " + result.get("last_name"));
 					System.out.print(", Company: " + result.get("company"));
-					System.out.println(", telephone number: " + result.get("number"));
+					System.out.println(", Phone number: " + result.get("number"));
 					InteractWithUser();
 					
 				} catch (NullPointerException e) {
@@ -92,8 +93,9 @@ public class ProgramController {
 				try {
 					DBObject result = cards.findOne(query);
 					System.out.print("First Name: " + result.get("first_name"));
+					System.out.print(", Last Name: " + result.get("last_name"));
 					System.out.print(", Company: " + result.get("company"));
-					System.out.println(", telephone number: " + result.get("number"));
+					System.out.println(", Phone number: " + result.get("number"));
 					InteractWithUser();
 					
 				} catch (NullPointerException e) {
@@ -108,8 +110,9 @@ public class ProgramController {
 				try {
 					DBObject result = cards.findOne(query);
 					System.out.print("First Name: " + result.get("first_name"));
-					System.out.println("Last Name: " + result.get("last_name"));
-					System.out.println(", telephone number: " + result.get("number"));
+					System.out.print(", Last Name: " + result.get("last_name"));
+					System.out.print(", Company: " + result.get("company"));
+					System.out.println(", Phone number: " + result.get("number"));
 					InteractWithUser();
 					
 				} catch (NullPointerException e) {
@@ -118,7 +121,23 @@ public class ProgramController {
 				}
 				break;
 			case "4":
-				sc.close();
+				System.out.println("Please enter the phone number of the contact");
+				String number = sc.nextLine();
+				query.put("number", number);
+				try {
+					DBObject result = cards.findOne(query);
+					System.out.print("First Name: " + result.get("first_name"));
+					System.out.print(", Last Name: " + result.get("last_name"));
+					System.out.print(", Company: " + result.get("company"));
+					System.out.println(", Phone number: " + result.get("number"));
+					InteractWithUser();
+					
+				} catch (NullPointerException e) {
+					System.out.println("No result found");
+					view();
+				}
+				break;
+			case "5":
 				exit = true;
 				break;
 			default:
@@ -130,7 +149,6 @@ public class ProgramController {
 
 	private static void add() {
 		// DECIDE IF WHILE(TRUE) OR CALL METHOD AGAIN
-		Scanner sc = new Scanner(System.in);
 		boolean exit = false;
 
 		System.out.println("Add:");
@@ -152,7 +170,7 @@ public class ProgramController {
 	}
 
 	private static void update() {
-		Scanner sc = new Scanner(System.in);
+		//ADD NUMBER TO ALL
 		boolean exit = false;
 		String viewMessage = "Update: Please enter the number of what you would like to search by:\n"
 				+ "1: First name\n" + "2: Last name\n" + "3: Company\n" + "4: Exit";
@@ -195,7 +213,6 @@ public class ProgramController {
 	}
 
 	private static void delete() {
-		Scanner sc = new Scanner(System.in);
 		boolean exit = false;
 		String viewMessage = "Delete: Please enter the number of what you would like to search by:\n"
 				+ "1: First name\n" + "2: Last name\n" + "3: Company\n" + "4: Exit";
