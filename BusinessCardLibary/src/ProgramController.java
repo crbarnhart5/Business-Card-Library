@@ -2,80 +2,111 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Scanner;
 
+import org.bson.Document;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+
 public class ProgramController {
-	public static void Main(String[] args) {
-		System.out.println("Hello, please select your choice");
+	static DBCollection cards;
+
+	public static void main(String[] args) {
+		MongoClient mongoClient = new MongoClient();
+		DB database = mongoClient.getDB("contacts");
+		cards = database.getCollection("cards");
 		InteractWithUser();
+		mongoClient.close();
 		System.out.println("Goodbye");
 	}
 
 	private static void InteractWithUser() {
 		Scanner sc = new Scanner(System.in);
-		String initialMessage = "Please enter number of option:\n" 
-				+ "1: View contact info\n" 
-				+ "2: Add contact info\n"
-				+ "3: Update contact info\n" 
-				+ "4: Delete contact info\n" 
-				+ "5: Exit";
+		boolean exit = false;
+		String initialMessage = "Please enter number of option:\n" + "1: View contact info\n" + "2: Add contact info\n"
+				+ "3: Update contact info\n" + "4: Delete contact info\n" + "5: Exit";
 
 		do {
 			System.out.println(initialMessage);
 			String choice = sc.nextLine();
 			switch (choice) {
 			case "1":
-				View();
+				view();
 				break;
 			case "2":
-				Add();
+				add();
 				break;
 			case "3":
-				Update();
+				update();
 				break;
 			case "4":
-				Delete();
+				delete();
 				break;
 			case "5":
 				sc.close();
-				return;
+				exit = true;
+				break;
 			default:
 				System.out.println("Invalid choice entered");
 				break;
 			}
 
-		} while (true);
+		} while (exit);
 
 	}
 
-	private static void View() {
+	private static void view() {
+		DB database;
+		DBObject query = new BasicDBObject();
 		Scanner sc = new Scanner(System.in);
-		String viewMessage = "View: Please enter the number of what you would like to search by:\n" 
-				+ "1: First name\n"
-				+ "2: Last name\n" 
-				+ "3: Company\n" 
-				+ "4: Exit";
+		boolean exit = false;
+		String viewMessage = "View: Please enter the number of what you would like to search by:\n" + "1: First name\n"
+				+ "2: Last name\n" + "3: Company\n" + "4: Exit";
 		do {
 			System.out.println(viewMessage);
 			String choice = sc.nextLine();
 			switch (choice) {
-			case "1":
+			case "1": {
+				System.out.println("Please enter the first name of the contact");
+				String name = sc.nextLine();
+				query.put("first_name", name);
+				try {
+					DBObject result = cards.findOne(query);
+					System.out.print("Last Name: " + result.get("last_name"));
+					System.out.print(", Company: " + result.get("company"));
+					System.out.println(", telephone number: " + result.get("number"));
+					InteractWithUser();
+					
+				} catch (NullPointerException e) {
+					System.out.println("No result found");
+					view();
+				}
+			}
 				break;
 			case "2":
+				System.out.println("Second name chosen");
 				break;
 			case "3":
+				System.out.println("Third name chosen");
 				break;
-			case "4": sc.close();
-				return;
+			case "4":
+				sc.close();
+				exit = true;
+				break;
 			default:
 				System.out.println("Invalid choice entered");
 				break;
 			}
-		} while (true);
-
+		} while (!exit);
 	}
 
-	private static void Add() {
+	private static void add() {
+		// DECIDE IF WHILE(TRUE) OR CALL METHOD AGAIN
 		Scanner sc = new Scanner(System.in);
-		
+		boolean exit = false;
+
 		System.out.println("Add:");
 		System.out.println("Please enter the contact's first name.");
 		String fName = sc.nextLine();
@@ -87,106 +118,116 @@ public class ProgramController {
 		String number = sc.nextLine();
 		System.out.println("Prepare to take photo of business card. Press enter when ready");
 		sc.nextLine();
-		BufferedImage businessCard = TakePhoto();
-		
-		//Call DBController add method
+		// BufferedImage businessCard = TakePhoto();
+		System.out.println("Buffered image taken");
+		System.out.println("add called");
+		InteractWithUser();
+		// Call DBController add method
 	}
 
-	private static void Update() {
+	private static void update() {
 		Scanner sc = new Scanner(System.in);
-		String viewMessage = "Update: Please enter the number of what you would like to search by:\n" 
-				+ "1: First name\n"
-				+ "2: Last name\n" 
-				+ "3: Company\n" 
-				+ "4: Exit";
-		
+		boolean exit = false;
+		String viewMessage = "Update: Please enter the number of what you would like to search by:\n"
+				+ "1: First name\n" + "2: Last name\n" + "3: Company\n" + "4: Exit";
+
 		do {
 			System.out.println(viewMessage);
 			String choice = sc.nextLine();
 			switch (choice) {
 			case "1":
+				System.out.println("first name chosen");
 				break;
 			case "2":
+				System.out.println("second name chosen");
 				break;
 			case "3":
+				System.out.println("company chosen");
 				break;
-			case "4": sc.close();
+			case "4":
+				sc.close();
 				return;
 			default:
 				System.out.println("Invalid choice entered");
 				break;
 			}
-			
-		System.out.println("Please enter search term");
-		String term = sc.nextLine();
-			
-		//Iterate through options matching search
-		
-		//Ask what field they would like to update, iterate through available options
-		
-		System.out.println("What would you like to replace the field with?");
-		String replacement = sc.nextLine();
-		
-		//Update field
-		
-		System.out.println("Update completed");
-		} while (true);
-	}
 
-	private static void Delete() {
-		Scanner sc = new Scanner(System.in);
-		String viewMessage = "Delete: Please enter the number of what you would like to search by:\n" 
-				+ "1: First name\n"
-				+ "2: Last name\n" 
-				+ "3: Company\n" 
-				+ "4: Exit";
-		
-		do {
-			System.out.println(viewMessage);
-			String choice = sc.nextLine();
-			switch (choice) {
-			case "1":
-				break;
-			case "2":
-				break;
-			case "3":
-				break;
-			case "4": sc.close();
-				return;
-			default:
-				System.out.println("Invalid choice entered");
-				break;
-			}
-			
 			System.out.println("Please enter search term");
 			String term = sc.nextLine();
-			
-			//List results asking which to delete
-			
-			//Call DBController delete method
-			
-			System.out.println("Contact deleted");
-			
+
+			// Iterate through options matching search
+
+			// Ask what field they would like to update, iterate through available options
+
+			System.out.println("What would you like to replace the field with?");
+			String replacement = sc.nextLine();
+
+			// Update field
+
+			System.out.println("Update completed");
 		} while (true);
 	}
 
-	private static BufferedImage TakePhoto() {
+	private static void delete() {
+		Scanner sc = new Scanner(System.in);
+		boolean exit = false;
+		String viewMessage = "Delete: Please enter the number of what you would like to search by:\n"
+				+ "1: First name\n" + "2: Last name\n" + "3: Company\n" + "4: Exit";
+
+		do {
+			System.out.println(viewMessage);
+			String choice = sc.nextLine();
+			switch (choice) {
+			case "1":
+				System.out.println("First name chosen");
+				break;
+			case "2":
+				System.out.println("Second name chosen");
+				break;
+			case "3":
+				System.out.println("Company chosen");
+				break;
+			case "4":
+				sc.close();
+				exit = true;
+				break;
+			default:
+				System.out.println("Invalid choice entered");
+				break;
+			}
+
+			System.out.println("Please enter search term");
+			String term = sc.nextLine();
+
+			// List results asking which to delete
+
+			// Call DBController delete method
+
+			System.out.println("Contact deleted");
+
+		} while (exit);
+		InteractWithUser();
+	}
+
+	private static BufferedImage takePhoto() {
 
 		return null;
 	}
-	
-	private static void Tester() {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("1: View \n2: Add");
-		String choice = sc.nextLine();
-		switch(choice) {
-		case "1":
-			break;
-		case "2":
-			break;
-		default: System.out.println("Didn't work");
-		Tester();
-		break;
-		}
-	}
+
+	// implement a iterate through results method
+
+//	private static void tester() {
+//		Scanner sc = new Scanner(System.in);
+//		System.out.println("1: View \n2: Add");
+//		String choice = sc.nextLine();
+//		switch(choice) {
+//		case "1":
+//			break;
+//		case "2":
+//			break;
+//		default: System.out.println("Didn't work");
+//		tester();
+//		break;
+//		}
+//	}
 }
