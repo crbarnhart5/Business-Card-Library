@@ -19,12 +19,13 @@ public class ProgramController {
 		MongoClient mongoClient = new MongoClient();
 		DB database = mongoClient.getDB("contacts");
 		cards = database.getCollection("cards");
-		InteractWithUser();
+		interactWithUser();
 		mongoClient.close();
+		sc.close();
 		System.out.println("Goodbye");
 	}
 
-	private static void InteractWithUser() {
+	private static void interactWithUser() {
 		boolean exit = false;
 		String initialMessage = "Please enter number of option:\n" + "1: View contact info\n" + "2: Add contact info\n"
 				+ "3: Update contact info\n" + "4: Delete contact info\n" + "5: Exit";
@@ -46,7 +47,6 @@ public class ProgramController {
 				delete();
 				break;
 			case "5":
-				sc.close();
 				exit = true;
 				break;
 			default:
@@ -54,7 +54,7 @@ public class ProgramController {
 				break;
 			}
 
-		} while (exit);
+		} while (!exit);
 
 	}
 
@@ -67,35 +67,35 @@ public class ProgramController {
 			System.out.println(viewMessage);
 			String choice = sc.nextLine();
 			switch (choice) {
-			case "1": {
+			case "1":
 				System.out.println("Please enter the first name of the contact");
 				String name = sc.nextLine();
 				query.put("first_name", name);
 				try {
 					DBObject result = cards.findOne(query);
-					System.out.print("First Name: " + result.get("first_name"));
+					System.out.print("\nFirst Name: " + result.get("first_name"));
 					System.out.print(", Last Name: " + result.get("last_name"));
 					System.out.print(", Company: " + result.get("company"));
 					System.out.println(", Phone number: " + result.get("number"));
-					InteractWithUser();
+					exit = true;
 
 				} catch (NullPointerException e) {
 					System.out.println("No result found");
 					view();
 				}
-			}
+
 				break;
 			case "2":
 				System.out.println("Please enter the last name of the contact");
-				String name = sc.nextLine();
+				name = sc.nextLine();
 				query.put("last_name", name);
 				try {
 					DBObject result = cards.findOne(query);
-					System.out.print("First Name: " + result.get("first_name"));
+					System.out.print("\nFirst Name: " + result.get("first_name"));
 					System.out.print(", Last Name: " + result.get("last_name"));
 					System.out.print(", Company: " + result.get("company"));
 					System.out.println(", Phone number: " + result.get("number"));
-					InteractWithUser();
+					exit = true;
 
 				} catch (NullPointerException e) {
 					System.out.println("No result found");
@@ -108,11 +108,11 @@ public class ProgramController {
 				query.put("company", company);
 				try {
 					DBObject result = cards.findOne(query);
-					System.out.print("First Name: " + result.get("first_name"));
+					System.out.print("\nFirst Name: " + result.get("first_name"));
 					System.out.print(", Last Name: " + result.get("last_name"));
 					System.out.print(", Company: " + result.get("company"));
 					System.out.println(", Phone number: " + result.get("number"));
-					InteractWithUser();
+					exit = true;
 
 				} catch (NullPointerException e) {
 					System.out.println("No result found");
@@ -125,11 +125,11 @@ public class ProgramController {
 				query.put("number", number);
 				try {
 					DBObject result = cards.findOne(query);
-					System.out.print("First Name: " + result.get("first_name"));
+					System.out.print("\nFirst Name: " + result.get("first_name"));
 					System.out.print(", Last Name: " + result.get("last_name"));
 					System.out.print(", Company: " + result.get("company"));
 					System.out.println(", Phone number: " + result.get("number"));
-					InteractWithUser();
+					exit = true;
 
 				} catch (NullPointerException e) {
 					System.out.println("No result found");
@@ -144,6 +144,7 @@ public class ProgramController {
 				break;
 			}
 		} while (!exit);
+		interactWithUser();
 	}
 
 	private static void add() {
@@ -162,54 +163,103 @@ public class ProgramController {
 		query.put("first_name", fName);
 		query.put("last_name", lName);
 		query.put("company", company);
-		if(number != null && number.length() > 0) {
-			query.put("number",number);
+		if (number != null && number.length() > 0) {
+			query.put("number", number);
 		}
 		cards.insert(query);
-		InteractWithUser();
+		interactWithUser();
 	}
 
 	private static void update() {
-		// ADD NUMBER TO ALL
+		DBObject query = new BasicDBObject();
 		boolean exit = false;
-		String viewMessage = "Update: Please enter the number of what you would like to search by:\n"
-				+ "1: First name\n" + "2: Last name\n" + "3: Company\n" + "4: Exit";
-
+		String viewMessage = "View: Please enter the number of what you would like to search by:\n" + "1: First name\n"
+				+ "2: Last name\n3: Company\n4: Phone number\n5: Exit";
 		do {
 			System.out.println(viewMessage);
 			String choice = sc.nextLine();
 			switch (choice) {
 			case "1":
-				System.out.println("first name chosen");
+				System.out.println("Please enter the first name of the contact");
+				String name = sc.nextLine();
+				query.put("first_name", name);
+				try {
+					DBObject result = cards.findOne(query);
+					System.out.print("\nFirst Name: " + result.get("first_name"));
+					System.out.print(", Last Name: " + result.get("last_name"));
+					System.out.print(", Company: " + result.get("company"));
+					System.out.println(", Phone number: " + result.get("number"));
+					updateHelper(query);
+					exit = true;
+
+				} catch (NullPointerException e) {
+					System.out.println("No result found");
+					view();
+
+				}
 				break;
 			case "2":
-				System.out.println("second name chosen");
+				System.out.println("Please enter the last name of the contact");
+				name = sc.nextLine();
+				query.put("last_name", name);
+				try {
+					DBObject result = cards.findOne(query);
+					System.out.print("\nFirst Name: " + result.get("first_name"));
+					System.out.print(", Last Name: " + result.get("last_name"));
+					System.out.print(", Company: " + result.get("company"));
+					System.out.println(", Phone number: " + result.get("number"));
+					updateHelper(query);
+					exit = true;
+
+				} catch (NullPointerException e) {
+					System.out.println("No result found");
+					view();
+				}
 				break;
 			case "3":
-				System.out.println("company chosen");
+				System.out.println("Please enter the company of the contact");
+				String company = sc.nextLine();
+				query.put("company", company);
+				try {
+					DBObject result = cards.findOne(query);
+					System.out.print("\nFirst Name: " + result.get("first_name"));
+					System.out.print(", Last Name: " + result.get("last_name"));
+					System.out.print(", Company: " + result.get("company"));
+					System.out.println(", Phone number: " + result.get("number"));
+					updateHelper(query);
+					exit = true;
+
+				} catch (NullPointerException e) {
+					System.out.println("No result found");
+					view();
+				}
 				break;
 			case "4":
-				sc.close();
-				return;
+				System.out.println("Please enter the phone number of the contact");
+				String number = sc.nextLine();
+				query.put("number", number);
+				try {
+					DBObject result = cards.findOne(query);
+					System.out.print("\nFirst Name: " + result.get("first_name"));
+					System.out.print(", Last Name: " + result.get("last_name"));
+					System.out.print(", Company: " + result.get("company"));
+					System.out.println(", Phone number: " + result.get("number"));
+					updateHelper(query);
+					exit = true;
+
+				} catch (NullPointerException e) {
+					System.out.println("No result found");
+					view();
+				}
+				break;
+			case "5":
+				exit = true;
+				break;
 			default:
 				System.out.println("Invalid choice entered");
 				break;
 			}
-
-			System.out.println("Please enter search term");
-			String term = sc.nextLine();
-
-			// Iterate through options matching search
-
-			// Ask what field they would like to update, iterate through available options
-
-			System.out.println("What would you like to replace the field with?");
-			String replacement = sc.nextLine();
-
-			// Update field
-
-			System.out.println("Update completed");
-		} while (true);
+		} while (!exit);
 	}
 
 	private static void delete() {
@@ -249,7 +299,7 @@ public class ProgramController {
 			System.out.println("Contact deleted");
 
 		} while (exit);
-		InteractWithUser();
+		interactWithUser();
 	}
 
 	private static BufferedImage takePhoto() {
@@ -257,20 +307,54 @@ public class ProgramController {
 		return null;
 	}
 
+	private static void updateHelper(DBObject query) {
+		boolean exit = false;
+		BasicDBObject updateDoc = new BasicDBObject();
+		String viewMessage = "Please enter which field you would like to update:\n1: First name\n"
+				+ "2: Last name\n3: Company\n4: Phone number\n5: Exit";
+
+		System.out.println(viewMessage);
+		String choice = sc.nextLine();
+		do {
+			switch (choice) {
+			case "1":
+				System.out.println("Please enter new first name");
+				String name = sc.nextLine();
+				updateDoc.append("$set", new BasicDBObject().append("first_name", name));
+				cards.update(query, updateDoc);
+				exit = true;
+				break;
+			case "2":
+				System.out.println("Please enter new last name");
+				name = sc.nextLine();
+				updateDoc.append("$set", new BasicDBObject().append("last_name", name));
+				cards.update(query, updateDoc);
+				exit = true;
+				break;
+			case "3":
+				System.out.println("Please enter new company name");
+				String company = sc.nextLine();
+				updateDoc.append("$set", new BasicDBObject().append("company", company));
+				cards.update(query, updateDoc);
+				exit = true;
+				break;
+			case "4":
+				System.out.println("Please enter new company name");
+				String number = sc.nextLine();
+				updateDoc.append("$set", new BasicDBObject().append("number", number));
+				cards.update(query, updateDoc);
+				exit = true;
+				break;
+			case "5":
+				exit = true;
+				break;
+			default:
+				System.out.println("Invalid choice entered");
+				break;
+			}
+		} while (!exit);
+	}
 	// implement a iterate through results method
 
-//	private static void tester() {
-//		Scanner sc = new Scanner(System.in);
-//		System.out.println("1: View \n2: Add");
-//		String choice = sc.nextLine();
-//		switch(choice) {
-//		case "1":
-//			break;
-//		case "2":
-//			break;
-//		default: System.out.println("Didn't work");
-//		tester();
-//		break;
-//		}
-//	}
+
 }
