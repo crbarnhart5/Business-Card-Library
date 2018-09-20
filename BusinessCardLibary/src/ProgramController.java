@@ -26,11 +26,9 @@ public class ProgramController {
 	}
 
 	private static void interactWithUser() {
-		boolean exit = false;
 		String initialMessage = "Please enter number of option:\n" + "1: View contact info\n" + "2: Add contact info\n"
 				+ "3: Update contact info\n" + "4: Delete contact info\n" + "5: Exit";
 
-		do {
 			System.out.println(initialMessage);
 			String choice = sc.nextLine();
 			switch (choice) {
@@ -47,14 +45,12 @@ public class ProgramController {
 				delete();
 				break;
 			case "5":
-				exit = true;
 				break;
 			default:
 				System.out.println("Invalid choice entered");
+				interactWithUser();
 				break;
 			}
-
-		} while (!exit);
 
 	}
 
@@ -260,6 +256,7 @@ public class ProgramController {
 				break;
 			}
 		} while (!exit);
+		interactWithUser();
 	}
 
 	private static void delete() {
@@ -355,6 +352,26 @@ public class ProgramController {
 		} while (!exit);
 	}
 	// implement a iterate through results method
-
+	public static void deleteHelperFName(){
+		DBObject query = new BasicDBObject();
+		System.out.println("What is the first name");
+		String name = sc.nextLine();
+		query.put("first_name", name);
+		
+	}
+	
+	public static void deleteHelperLName() {
+		DBObject query = new BasicDBObject();
+		System.out.println("What is the last name");
+		String name = sc.nextLine();
+		query.put("last_name", name);
+	}
+	
+	public static void deleteHelperCompany() {
+		DBObject query = new BasicDBObject();
+		System.out.println("What is the last name");
+		String company = sc.nextLine();
+		query.put("company", company);
+	}
 
 }
