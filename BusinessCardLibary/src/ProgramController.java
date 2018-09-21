@@ -91,42 +91,38 @@ public class ProgramController {
 			switch (choice) {
 			case "1":
 				result = findFName();
-				if(result != null) {
+				if (result != null) {
 					printContact(result);
 					exit = true;
-				}
-				else {
+				} else {
 					System.out.println("No contact found");
 				}
 				break;
 			case "2":
 				result = findLName();
-				if(result != null) {
+				if (result != null) {
 					printContact(result);
 					exit = true;
-				}
-				else {
+				} else {
 					System.out.println("No contact found");
 				}
-				
+
 				break;
 			case "3":
 				result = findCompany();
-				if(result != null) {
+				if (result != null) {
 					printContact(result);
 					exit = true;
-				}
-				else {
+				} else {
 					System.out.println("No contact found");
 				}
 				break;
 			case "4":
 				result = findNumber();
-				if(result != null) {
+				if (result != null) {
 					printContact(result);
 					exit = true;
-				}
-				else {
+				} else {
 					System.out.println("No contact found");
 				}
 				break;
@@ -268,7 +264,6 @@ public class ProgramController {
 
 	}
 
-
 	private static DBObject findFName() {
 		DBObject query = new BasicDBObject();
 		System.out.println("Please enter the first name of the contact");
@@ -309,6 +304,38 @@ public class ProgramController {
 
 	}
 
+	private static void updateFName(DBObject query) {
+		BasicDBObject updateDoc = new BasicDBObject();
+		System.out.println("Please enter new first name");
+		String name = sc.nextLine();
+		updateDoc.append("$set", new BasicDBObject().append("first_name", name));
+		cards.update(query, updateDoc);
+	}
+
+	private static void updateLName(DBObject query) {
+		BasicDBObject updateDoc = new BasicDBObject();
+		System.out.println("Please enter new last name");
+		name = sc.nextLine();
+		updateDoc.append("$set", new BasicDBObject().append("last_name", name));
+		cards.update(query, updateDoc);
+	}
+
+	private static void updateCompany(DBObject query) {
+		BasicDBObject updateDoc = new BasicDBObject();
+		System.out.println("Please enter new company name");
+		String company = sc.nextLine();
+		updateDoc.append("$set", new BasicDBObject().append("company", company));
+		cards.update(query, updateDoc);
+	}
+
+	private static void updateNumber(DBObject query) {
+		BasicDBObject updateDoc = new BasicDBObject();
+		System.out.println("Please enter new company name");
+		String number = sc.nextLine();
+		updateDoc.append("$set", new BasicDBObject().append("number", number));
+		cards.update(query, updateDoc);
+	}
+
 	private static BufferedImage takePhoto() {
 
 		return null;
@@ -316,7 +343,6 @@ public class ProgramController {
 
 	private static void updateHelper(DBObject query) {
 		boolean exit = false;
-		BasicDBObject updateDoc = new BasicDBObject();
 		String viewMessage = "Please enter which field you would like to update:\n1: First name\n"
 				+ "2: Last name\n3: Company\n4: Phone number\n5: Exit";
 
@@ -325,31 +351,19 @@ public class ProgramController {
 		do {
 			switch (choice) {
 			case "1":
-				System.out.println("Please enter new first name");
-				String name = sc.nextLine();
-				updateDoc.append("$set", new BasicDBObject().append("first_name", name));
-				cards.update(query, updateDoc);
+				updateFName(query);
 				exit = true;
 				break;
 			case "2":
-				System.out.println("Please enter new last name");
-				name = sc.nextLine();
-				updateDoc.append("$set", new BasicDBObject().append("last_name", name));
-				cards.update(query, updateDoc);
+				updateLName(query);
 				exit = true;
 				break;
 			case "3":
-				System.out.println("Please enter new company name");
-				String company = sc.nextLine();
-				updateDoc.append("$set", new BasicDBObject().append("company", company));
-				cards.update(query, updateDoc);
+				updateCompany(query);
 				exit = true;
 				break;
 			case "4":
-				System.out.println("Please enter new company name");
-				String number = sc.nextLine();
-				updateDoc.append("$set", new BasicDBObject().append("number", number));
-				cards.update(query, updateDoc);
+				updateNumber(query);
 				exit = true;
 				break;
 			case "5":
