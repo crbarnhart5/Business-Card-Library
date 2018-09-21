@@ -159,7 +159,7 @@ public class ProgramController {
 	}
 
 	private static void update() {
-		DBObject query = new BasicDBObject();
+		DBObject result = new BasicDBObject();
 		boolean exit = false;
 		String viewMessage = "View: Please enter the number of what you would like to search by:\n1: First name\n"
 				+ "2: Last name\n3: Company\n4: Phone number\n5: Exit";
@@ -168,77 +168,20 @@ public class ProgramController {
 			String choice = sc.nextLine();
 			switch (choice) {
 			case "1":
-				System.out.println("Please enter the first name of the contact");
-				String name = sc.nextLine();
-				query.put("first_name", name);
-				try {
-					DBObject result = cards.findOne(query);
-					System.out.print("\nFirst Name: " + result.get("first_name"));
-					System.out.print(", Last Name: " + result.get("last_name"));
-					System.out.print(", Company: " + result.get("company"));
-					System.out.println(", Phone number: " + result.get("number"));
-					updateHelper(query);
-					exit = true;
-
-				} catch (NullPointerException e) {
-					System.out.println("No result found");
-					view();
-
-				}
+				result = findFName();
+				updateHelper(result);
 				break;
 			case "2":
-				System.out.println("Please enter the last name of the contact");
-				name = sc.nextLine();
-				query.put("last_name", name);
-				try {
-					DBObject result = cards.findOne(query);
-					System.out.print("\nFirst Name: " + result.get("first_name"));
-					System.out.print(", Last Name: " + result.get("last_name"));
-					System.out.print(", Company: " + result.get("company"));
-					System.out.println(", Phone number: " + result.get("number"));
-					updateHelper(query);
-					exit = true;
-
-				} catch (NullPointerException e) {
-					System.out.println("No result found");
-					view();
-				}
+				result = findLName();
+				updateHelper(result);
 				break;
 			case "3":
-				System.out.println("Please enter the company of the contact");
-				String company = sc.nextLine();
-				query.put("company", company);
-				try {
-					DBObject result = cards.findOne(query);
-					System.out.print("\nFirst Name: " + result.get("first_name"));
-					System.out.print(", Last Name: " + result.get("last_name"));
-					System.out.print(", Company: " + result.get("company"));
-					System.out.println(", Phone number: " + result.get("number"));
-					updateHelper(query);
-					exit = true;
-
-				} catch (NullPointerException e) {
-					System.out.println("No result found");
-					view();
-				}
+				result = findCompany();
+				updateHelper(result);
 				break;
 			case "4":
-				System.out.println("Please enter the phone number of the contact");
-				String number = sc.nextLine();
-				query.put("number", number);
-				try {
-					DBObject result = cards.findOne(query);
-					System.out.print("\nFirst Name: " + result.get("first_name"));
-					System.out.print(", Last Name: " + result.get("last_name"));
-					System.out.print(", Company: " + result.get("company"));
-					System.out.println(", Phone number: " + result.get("number"));
-					updateHelper(query);
-					exit = true;
-
-				} catch (NullPointerException e) {
-					System.out.println("No result found");
-					view();
-				}
+				result = findNumber();
+				updateHelper(result);
 				break;
 			case "5":
 				exit = true;
@@ -315,7 +258,7 @@ public class ProgramController {
 	private static void updateLName(DBObject query) {
 		BasicDBObject updateDoc = new BasicDBObject();
 		System.out.println("Please enter new last name");
-		name = sc.nextLine();
+		String name = sc.nextLine();
 		updateDoc.append("$set", new BasicDBObject().append("last_name", name));
 		cards.update(query, updateDoc);
 	}
@@ -341,7 +284,7 @@ public class ProgramController {
 		return null;
 	}
 
-	private static void updateHelper(DBObject query) {
+	private static void updateHelper(DBObject result) {
 		boolean exit = false;
 		String viewMessage = "Please enter which field you would like to update:\n1: First name\n"
 				+ "2: Last name\n3: Company\n4: Phone number\n5: Exit";
@@ -351,19 +294,19 @@ public class ProgramController {
 		do {
 			switch (choice) {
 			case "1":
-				updateFName(query);
+				updateFName(result);
 				exit = true;
 				break;
 			case "2":
-				updateLName(query);
+				updateLName(result);
 				exit = true;
 				break;
 			case "3":
-				updateCompany(query);
+				updateCompany(result);
 				exit = true;
 				break;
 			case "4":
-				updateNumber(query);
+				updateNumber(result);
 				exit = true;
 				break;
 			case "5":
