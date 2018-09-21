@@ -1,3 +1,4 @@
+
 /**
  * ProgramController.java 1.0
  * 
@@ -27,11 +28,10 @@ import org.slf4j.LoggerFactory;
 public class ProgramController {
 	static DBCollection cards;
 	static Scanner sc;
-	static Logger root = (Logger) LoggerFactory
-	        .getLogger(Logger.ROOT_LOGGER_NAME);
+	static Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
 	static {
-	    root.setLevel(Level.OFF);
+		root.setLevel(Level.OFF);
 	}
 
 	public static void main(String[] args) {
@@ -46,8 +46,8 @@ public class ProgramController {
 	}
 
 	private static void interactWithUser() {
-		String initialMessage = "Please enter number of option:\n" + "1: View contact info\n" + "2: Add contact info\n"
-				+ "3: Update contact info\n" + "4: Delete contact info\n" + "5: Exit";
+		String initialMessage = "Please enter number of option:\n1: View contact info\n2: Add contact info\n"
+				+ "3: Update contact info\n4: Delete contact info\n5: Exit";
 		boolean exit = false;
 
 		do {
@@ -82,68 +82,27 @@ public class ProgramController {
 	private static void view() {
 		DBObject query = new BasicDBObject();
 		boolean exit = false;
-		String viewMessage = "View: Please enter the number of what you would like to search by:\n" + "1: First name\n"
+		String viewMessage = "View: Please enter the number of what you would like to search by:\n1: First name\n"
 				+ "2: Last name\n3: Company\n4: Phone number\n5: Exit";
 		do {
 			System.out.println(viewMessage);
 			String choice = sc.nextLine();
 			switch (choice) {
 			case "1":
-				System.out.println("Please enter the first name of the contact");
-				String name = sc.nextLine();
-				query.put("first_name", name);
-				try {
-					DBObject result = cards.findOne(query);
-					printContact(result);
-					exit = true;
-
-				} catch (NullPointerException e) {
-					System.out.println("No result found");
-					view();
-				}
-
+				viewFName();
+				exit = true;
 				break;
 			case "2":
-				System.out.println("Please enter the last name of the contact");
-				name = sc.nextLine();
-				query.put("last_name", name);
-				try {
-					DBObject result = cards.findOne(query);
-					printContact(result);
-					exit = true;
-
-				} catch (NullPointerException e) {
-					System.out.println("No result found");
-					view();
-				}
+				viewLName();
+				exit = true;
 				break;
 			case "3":
-				System.out.println("Please enter the company of the contact");
-				String company = sc.nextLine();
-				query.put("company", company);
-				try {
-					DBObject result = cards.findOne(query);
-					printContact(result);
-					exit = true;
-
-				} catch (NullPointerException e) {
-					System.out.println("No result found");
-					view();
-				}
+				viewCompany();
+				exit = true;
 				break;
 			case "4":
-				System.out.println("Please enter the phone number of the contact");
-				String number = sc.nextLine();
-				query.put("number", number);
-				try {
-					DBObject result = cards.findOne(query);
-					printContact(result);
-					exit = true;
-
-				} catch (NullPointerException e) {
-					System.out.println("No result found");
-					view();
-				}
+				viewNumber();
+				exit = true;
 				break;
 			case "5":
 				exit = true;
@@ -180,7 +139,7 @@ public class ProgramController {
 	private static void update() {
 		DBObject query = new BasicDBObject();
 		boolean exit = false;
-		String viewMessage = "View: Please enter the number of what you would like to search by:\n" + "1: First name\n"
+		String viewMessage = "View: Please enter the number of what you would like to search by:\n1: First name\n"
 				+ "2: Last name\n3: Company\n4: Phone number\n5: Exit";
 		do {
 			System.out.println(viewMessage);
@@ -281,6 +240,66 @@ public class ProgramController {
 		cards.remove(query);
 		System.out.println("Contact deleted");
 
+	}
+
+	private static void viewFName() {
+		DBObject query = new BasicDBObject();
+		System.out.println("Please enter the first name of the contact");
+		String name = sc.nextLine();
+		query.put("first_name", name);
+		try {
+			DBObject result = cards.findOne(query);
+			printContact(result);
+
+		} catch (NullPointerException e) {
+			System.out.println("No result found");
+			view();
+		}
+	}
+
+	private static void viewLName() {
+		DBObject query = new BasicDBObject();
+		System.out.println("Please enter the last name of the contact");
+		String name = sc.nextLine();
+		query.put("last_name", name);
+		try {
+			DBObject result = cards.findOne(query);
+			printContact(result);
+
+		} catch (NullPointerException e) {
+			System.out.println("No result found");
+			view();
+		}
+	}
+
+	private static void viewCompany() {
+		DBObject query = new BasicDBObject();
+		System.out.println("Please enter the company of the contact");
+		String company = sc.nextLine();
+		query.put("company", company);
+		try {
+			DBObject result = cards.findOne(query);
+			printContact(result);
+
+		} catch (NullPointerException e) {
+			System.out.println("No result found");
+			view();
+		}
+	}
+
+	private static void viewNumber() {
+		DBObject query = new BasicDBObject();
+		System.out.println("Please enter the phone number of the contact");
+		String number = sc.nextLine();
+		query.put("number", number);
+		try {
+			DBObject result = cards.findOne(query);
+			printContact(result);
+
+		} catch (NullPointerException e) {
+			System.out.println("No result found");
+			view();
+		}
 	}
 
 	private static BufferedImage takePhoto() {
