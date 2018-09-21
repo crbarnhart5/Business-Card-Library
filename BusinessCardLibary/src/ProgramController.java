@@ -28,7 +28,9 @@ public class ProgramController {
 	private static void interactWithUser() {
 		String initialMessage = "Please enter number of option:\n" + "1: View contact info\n" + "2: Add contact info\n"
 				+ "3: Update contact info\n" + "4: Delete contact info\n" + "5: Exit";
+		boolean exit = false;
 
+		do {
 			System.out.println(initialMessage);
 			String choice = sc.nextLine();
 			switch (choice) {
@@ -45,12 +47,15 @@ public class ProgramController {
 				delete();
 				break;
 			case "5":
+				exit = true;
 				break;
+
 			default:
 				System.out.println("Invalid choice entered");
 				interactWithUser();
 				break;
 			}
+		} while (!exit);
 
 	}
 
@@ -69,10 +74,7 @@ public class ProgramController {
 				query.put("first_name", name);
 				try {
 					DBObject result = cards.findOne(query);
-					System.out.print("\nFirst Name: " + result.get("first_name"));
-					System.out.print(", Last Name: " + result.get("last_name"));
-					System.out.print(", Company: " + result.get("company"));
-					System.out.println(", Phone number: " + result.get("number"));
+					printContact(result);
 					exit = true;
 
 				} catch (NullPointerException e) {
@@ -87,10 +89,7 @@ public class ProgramController {
 				query.put("last_name", name);
 				try {
 					DBObject result = cards.findOne(query);
-					System.out.print("\nFirst Name: " + result.get("first_name"));
-					System.out.print(", Last Name: " + result.get("last_name"));
-					System.out.print(", Company: " + result.get("company"));
-					System.out.println(", Phone number: " + result.get("number"));
+					printContact(result);
 					exit = true;
 
 				} catch (NullPointerException e) {
@@ -104,10 +103,7 @@ public class ProgramController {
 				query.put("company", company);
 				try {
 					DBObject result = cards.findOne(query);
-					System.out.print("\nFirst Name: " + result.get("first_name"));
-					System.out.print(", Last Name: " + result.get("last_name"));
-					System.out.print(", Company: " + result.get("company"));
-					System.out.println(", Phone number: " + result.get("number"));
+					printContact(result);
 					exit = true;
 
 				} catch (NullPointerException e) {
@@ -121,10 +117,7 @@ public class ProgramController {
 				query.put("number", number);
 				try {
 					DBObject result = cards.findOne(query);
-					System.out.print("\nFirst Name: " + result.get("first_name"));
-					System.out.print(", Last Name: " + result.get("last_name"));
-					System.out.print(", Company: " + result.get("company"));
-					System.out.println(", Phone number: " + result.get("number"));
+					printContact(result);
 					exit = true;
 
 				} catch (NullPointerException e) {
@@ -140,7 +133,7 @@ public class ProgramController {
 				break;
 			}
 		} while (!exit);
-		interactWithUser();
+		// interactWithUser();
 	}
 
 	private static void add() {
@@ -163,7 +156,7 @@ public class ProgramController {
 			query.put("number", number);
 		}
 		cards.insert(query);
-		interactWithUser();
+		// interactWithUser();
 	}
 
 	private static void update() {
@@ -256,47 +249,22 @@ public class ProgramController {
 				break;
 			}
 		} while (!exit);
-		interactWithUser();
+		// interactWithUser();
 	}
 
 	private static void delete() {
-		boolean exit = false;
-		String viewMessage = "Delete: Please enter the number of what you would like to search by:\n"
-				+ "1: First name\n" + "2: Last name\n" + "3: Company\n" + "4: Exit";
+		BasicDBObject query = new BasicDBObject();
+		System.out.println("Please enter the first name of the contact");
+		String fName = sc.nextLine();
+		System.out.println("Please enter the last name of the contact");
+		String lName = sc.nextLine();
 
-		do {
-			System.out.println(viewMessage);
-			String choice = sc.nextLine();
-			switch (choice) {
-			case "1":
-				deleteHelperFName();
-				break;
-			case "2":
-				deleteHelperLName();
-				break;
-			case "3":
-				deleteHelperCompany();
-				break;
-			case "4":
-				sc.close();
-				exit = true;
-				break;
-			default:
-				System.out.println("Invalid choice entered");
-				break;
-			}
+		query.put("first_name", fName);
+		query.put("last_name", lName);
+		cards.remove(query);
+		System.out.println("Contact deleted");
 
-			System.out.println("Please enter search term");
-			String term = sc.nextLine();
-
-			// List results asking which to delete
-
-			// Call DBController delete method
-
-			System.out.println("Contact deleted");
-
-		} while (exit);
-		interactWithUser();
+		// interactWithUser();
 	}
 
 	private static BufferedImage takePhoto() {
@@ -351,29 +319,12 @@ public class ProgramController {
 			}
 		} while (!exit);
 	}
-	// implement a iterate through results method
-	public static void deleteHelperFName(){
-		DBObject query = new BasicDBObject();
-		System.out.println("What is the first name");
-		String name = sc.nextLine();
-		query.put("first_name", name);
-		cards.remove(query);
-	}
-	
-	public static void deleteHelperLName() {
-		DBObject query = new BasicDBObject();
-		System.out.println("What is the last name");
-		String name = sc.nextLine();
-		query.put("last_name", name);
-		cards.remove(query);
-	}
-	
-	public static void deleteHelperCompany() {
-		DBObject query = new BasicDBObject();
-		System.out.println("What is the last name");
-		String company = sc.nextLine();
-		query.put("company", company);
-		cards.remove(query);
+
+	public static void printContact(DBObject result) {
+		System.out.print("\nFirst Name: " + result.get("first_name"));
+		System.out.print(", Last Name: " + result.get("last_name"));
+		System.out.print(", Company: " + result.get("company"));
+		System.out.println(", Phone number: " + result.get("number"));
 	}
 
 }
