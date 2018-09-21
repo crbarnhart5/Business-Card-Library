@@ -1,3 +1,12 @@
+/**
+ * ProgramController.java 1.0
+ * 
+ * @author Connor Barnhart
+ * @version 1.0
+ *
+ *
+ */
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Scanner;
@@ -133,7 +142,6 @@ public class ProgramController {
 				break;
 			}
 		} while (!exit);
-		// interactWithUser();
 	}
 
 	private static void add() {
@@ -156,7 +164,6 @@ public class ProgramController {
 			query.put("number", number);
 		}
 		cards.insert(query);
-		// interactWithUser();
 	}
 
 	private static void update() {
@@ -249,7 +256,6 @@ public class ProgramController {
 				break;
 			}
 		} while (!exit);
-		// interactWithUser();
 	}
 
 	private static void delete() {
@@ -264,7 +270,6 @@ public class ProgramController {
 		cards.remove(query);
 		System.out.println("Contact deleted");
 
-		// interactWithUser();
 	}
 
 	private static BufferedImage takePhoto() {
