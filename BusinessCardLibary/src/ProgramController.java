@@ -19,9 +19,20 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import org.slf4j.LoggerFactory;
+
 public class ProgramController {
 	static DBCollection cards;
 	static Scanner sc;
+	static Logger root = (Logger) LoggerFactory
+	        .getLogger(Logger.ROOT_LOGGER_NAME);
+
+	static {
+	    root.setLevel(Level.OFF);
+	}
 
 	public static void main(String[] args) {
 		sc = new Scanner(System.in);
