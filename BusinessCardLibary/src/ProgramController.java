@@ -269,13 +269,13 @@ public class ProgramController {
 			String choice = sc.nextLine();
 			switch (choice) {
 			case "1":
-				System.out.println("First name chosen");
+				deleteHelperFName();
 				break;
 			case "2":
-				System.out.println("Second name chosen");
+				deleteHelperLName();
 				break;
 			case "3":
-				System.out.println("Company chosen");
+				deleteHelperCompany();
 				break;
 			case "4":
 				sc.close();
@@ -357,7 +357,7 @@ public class ProgramController {
 		System.out.println("What is the first name");
 		String name = sc.nextLine();
 		query.put("first_name", name);
-		
+		cards.remove(query);
 	}
 	
 	public static void deleteHelperLName() {
@@ -365,6 +365,7 @@ public class ProgramController {
 		System.out.println("What is the last name");
 		String name = sc.nextLine();
 		query.put("last_name", name);
+		cards.remove(query);
 	}
 	
 	public static void deleteHelperCompany() {
@@ -372,6 +373,7 @@ public class ProgramController {
 		System.out.println("What is the last name");
 		String company = sc.nextLine();
 		query.put("company", company);
+		cards.remove(query);
 	}
 
 }
