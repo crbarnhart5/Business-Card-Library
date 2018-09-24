@@ -390,7 +390,7 @@ public class ProgramController {
 	}
 
 	private static BufferedImage takePhoto() {
-
+		
 		return null;
 	}
 
