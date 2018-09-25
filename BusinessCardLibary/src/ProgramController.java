@@ -16,6 +16,7 @@ import org.bson.Document;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -32,7 +33,7 @@ public class ProgramController {
 	static DBCollection cards;
 	static Scanner sc;
 	
-	//Turning off mongodb logging
+	//Turning off MongoDB logging
 	static Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 	static {
 		root.setLevel(Level.OFF);
@@ -41,7 +42,7 @@ public class ProgramController {
 	public static void main(String[] args) {
 		sc = new Scanner(System.in);
 		
-		//Setting up mongodb connection
+		//Setting up MongoDB connection
 		MongoClient mongoClient = new MongoClient();
 		DB database = mongoClient.getDB("contacts");
 		cards = database.getCollection("cards");
@@ -395,8 +396,11 @@ public class ProgramController {
 
 	private static BufferedImage takePhoto() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat mat = Mat.eye(3, 3, CvType.CV_8UC1);
-        System.out.println("mat = " + mat.dump());
+		
+        Mat mat = new Mat();
+        VideoCapture capture = new VideoCapture(0);
+        capture.read(mat);
+        
 		return null;
 	}
 
