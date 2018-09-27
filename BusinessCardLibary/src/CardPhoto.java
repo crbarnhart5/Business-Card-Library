@@ -30,11 +30,14 @@ import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
 public class CardPhoto {
+	static BufferedImage image;
+	static boolean exit;;
 	// code influenced
 	// http://jdbates.blogspot.com/2015/01/this-post-is-about-how-to-capture-and.html
 	public static BufferedImage InteractWithUser(String args[]) {
 		Scanner sc = new Scanner(System.in);
-
+		exit = false;
+		
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		// Open the webcam
@@ -75,14 +78,14 @@ public class CardPhoto {
 		
 		button.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
-			    BufferedImage image = takePhoto(matrix);
+			    takePhoto(matrix);
 			    frame.dispose();
 			    frame2.dispose();
 			  } 
 			} );
 
 		
-		while (true) {
+		while (!exit) {
 
 			// Copy pixels from the Mat to the image
 			matrix.get(0, 0, data);
@@ -93,6 +96,7 @@ public class CardPhoto {
 			// Grab the next frame
 			capture.read(matrix);
 		}
+		return image;
 	}
 
 	public static BufferedImage mat2Img(Mat in) {
@@ -112,10 +116,9 @@ public class CardPhoto {
 		return out;
 	}
 
-	private static BufferedImage takePhoto(Mat mat) {
-		BufferedImage image = mat2Img(mat);
-		
-		return image;
+	private static void takePhoto(Mat mat) {
+		image = mat2Img(mat);
+		exit = true;
 		
 	}
 

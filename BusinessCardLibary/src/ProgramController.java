@@ -48,7 +48,8 @@ public class ProgramController {
 		cards = database.getCollection("cards");
 		
 		//interactWithUser();
-		takePhoto();
+		//taketo();
+		
 		
 		//Close scanner and connection to database
 		mongoClient.close();
@@ -395,12 +396,8 @@ public class ProgramController {
 	}
 
 	private static BufferedImage takePhoto() {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		
-        Mat mat = new Mat();
-        VideoCapture capture = new VideoCapture(0);
-        capture.read(mat);
-        
+        TakePhoto tp = new TakePhoto();
+        tp.capureSnapShot();
 		return null;
 	}
 
