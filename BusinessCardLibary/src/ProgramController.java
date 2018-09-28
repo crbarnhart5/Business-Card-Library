@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 public class ProgramController {
 	static DBCollection cards;
 	static Scanner sc;
+	static CardPhoto cardPhoto;
 	
 	//Turning off MongoDB logging
 	static Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
@@ -42,6 +43,7 @@ public class ProgramController {
 	public static void main(String[] args) {
 		sc = new Scanner(System.in);
 		
+		cardPhoto = new CardPhoto();
 		//Setting up MongoDB connection
 		MongoClient mongoClient = new MongoClient();
 		DB database = mongoClient.getDB("contacts");
@@ -123,6 +125,14 @@ public class ProgramController {
 				//If contact is found calls printMethod method on it and exits loop 
 				if (result != null) {
 					printContact(result);
+					
+					//Check if user would like to view business card
+					System.out.println("Would you like to view the business card? y/n");
+					String yN = sc.nextLine();
+					if(yN.equals("y")) {
+						cardPhoto.displayCard(result);
+					}
+	
 					exit = true;
 				} else {
 					System.out.println("No contact found");
@@ -135,6 +145,14 @@ public class ProgramController {
 				//If contact is found calls printMethod method on it and exits loop 
 				if (result != null) {
 					printContact(result);
+					
+					//Check if user would like to view business card
+					System.out.println("Would you like to view the business card? y/n");
+					String yN = sc.nextLine();
+					if(yN.equals("y")) {
+						cardPhoto.displayCard(result);
+					}
+					
 					exit = true;
 				} else {
 					System.out.println("No contact found");
@@ -148,6 +166,14 @@ public class ProgramController {
 				//If contact is found calls printMethod method on it and exits loop 
 				if (result != null) {
 					printContact(result);
+					
+					//Check if user would like to view business card
+					System.out.println("Would you like to view the business card? y/n");
+					String yN = sc.nextLine();
+					if(yN.equals("y")) {
+						cardPhoto.displayCard(result);
+					}
+					
 					exit = true;
 				} else {
 					System.out.println("No contact found");
@@ -160,6 +186,14 @@ public class ProgramController {
 				//If contact is found calls printMethod method on it and exits loop 
 				if (result != null) {
 					printContact(result);
+					
+					//Check if user would like to view business card
+					System.out.println("Would you like to view the business card? y/n");
+					String yN = sc.nextLine();
+					if(yN.equals("y")) {
+						cardPhoto.displayCard(result);
+					}
+					
 					exit = true;
 				} else {
 					System.out.println("No contact found");
@@ -191,12 +225,14 @@ public class ProgramController {
 		String company = sc.nextLine();
 		System.out.println("Please enter the contact's phone number");
 		String number = sc.nextLine();
+		BufferedImage card = cardPhoto.InteractWithUser();
 
 		//Supplies new information to DBObject
 		query.put("first_name", fName);
 		query.put("last_name", lName);
 		query.put("company", company);
 		query.put("number", number);
+		//add photo
 		
 		//Adds contact to database
 		cards.insert(query);
@@ -337,6 +373,7 @@ public class ProgramController {
 
 	/**
 	 * <p> Prompts the user for the first name of contact and updates contact with new info </p>
+	 * @param query the contact to be updated
 	 */
 	private static void updateFName(DBObject query) {
 		BasicDBObject updateDoc = new BasicDBObject();
@@ -352,6 +389,7 @@ public class ProgramController {
 
 	/**
 	 * <p> Prompts the user for the last name of contact and updates contact with new info </p>
+	 * @param query the contact to be updated
 	 */
 	private static void updateLName(DBObject query) {
 		BasicDBObject updateDoc = new BasicDBObject();
@@ -367,6 +405,7 @@ public class ProgramController {
 
 	/**
 	 * <p> Prompts the user for the company of contact and updates contact with new info </p>
+	 * @param query the contact to be updated
 	 */
 	private static void updateCompany(DBObject query) {
 		BasicDBObject updateDoc = new BasicDBObject();
@@ -382,6 +421,7 @@ public class ProgramController {
 
 	/**
 	 * <p> Prompts the user for the number of contact and updates contact with new info </p>
+	 * @param query the contact to be updated
 	 */
 	private static void updateNumber(DBObject query) {
 		BasicDBObject updateDoc = new BasicDBObject();
@@ -394,11 +434,24 @@ public class ProgramController {
 		updateDoc.append("$set", new BasicDBObject().append("number", number));
 		cards.update(query, updateDoc);
 	}
+	
+	/**
+	 * <p> Takes new photo of business card and replaces it in contact </p
+	 * @param query the contact to be updated
+	 */
+	private static void updatePicture(DBObject query) {
+		BasicDBObject updateDoc = new BasicDBObject();
+		
+		//Get new photo
+		BufferedImage card = cardPhoto.InteractWithUser();
+		
+		//Updates contact
+		
+	}
 
 	private static BufferedImage takePhoto() {
-        TakePhoto tp = new TakePhoto();
-        tp.capureSnapShot();
-		return null;
+        BufferedImage card = cardPhoto.InteractWithUser();
+		return card;
 	}
 
 	/**
@@ -408,7 +461,7 @@ public class ProgramController {
 	private static void updateHelper(DBObject result) {
 		boolean exit = false;
 		String viewMessage = "Please enter which field you would like to update:\n1: First name\n"
-				+ "2: Last name\n3: Company\n4: Phone number\n5: Exit";
+				+ "2: Last name\n3: Company\n4: Phone number\n5: Business card photo\n6: Exit";
 
 		System.out.println(viewMessage);
 		String choice = sc.nextLine();
@@ -435,6 +488,10 @@ public class ProgramController {
 				exit = true;
 				break;
 			case "5":
+				updatePicture(result);
+				exit = true;
+				break;
+			case "6":
 				exit = true;
 				break;
 			default:

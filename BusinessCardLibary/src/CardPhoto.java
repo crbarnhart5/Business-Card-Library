@@ -29,12 +29,17 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
+import com.mongodb.DBObject;
+
 public class CardPhoto {
 	static BufferedImage image;
-	static boolean exit;;
+	static boolean exit;
+	public static void CardPhoto() {
+		
+	}
 	// code influenced
 	// http://jdbates.blogspot.com/2015/01/this-post-is-about-how-to-capture-and.html
-	public static BufferedImage InteractWithUser(String args[]) {
+	public static BufferedImage InteractWithUser() {
 		Scanner sc = new Scanner(System.in);
 		exit = false;
 		
@@ -99,7 +104,7 @@ public class CardPhoto {
 		return image;
 	}
 
-	public static BufferedImage mat2Img(Mat in) {
+	private static BufferedImage mat2Img(Mat in) {
 		BufferedImage out;
 		byte[] data = new byte[320 * 240 * (int) in.elemSize()];
 		int type;
@@ -119,6 +124,10 @@ public class CardPhoto {
 	private static void takePhoto(Mat mat) {
 		image = mat2Img(mat);
 		exit = true;
+		
+	}
+	
+	public static void displayCard(DBObject contact) {
 		
 	}
 
