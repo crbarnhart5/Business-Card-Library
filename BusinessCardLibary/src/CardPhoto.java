@@ -37,8 +37,12 @@ public class CardPhoto {
 	public static void CardPhoto() {
 		
 	}
-	// code influenced
-	// http://jdbates.blogspot.com/2015/01/this-post-is-about-how-to-capture-and.html
+
+	/**
+	 * <p> Streams the webcam until the user presses the Take Photo button. Influenced by
+	 * http://jdbates.blogspot.com/2015/01/this-post-is-about-how-to-capture-and.html </p>
+	 * @return the BufferedImage of the business card
+	 */
 	public static BufferedImage InteractWithUser() {
 		Scanner sc = new Scanner(System.in);
 		exit = false;
@@ -71,6 +75,7 @@ public class CardPhoto {
 		frame.pack();
 		frame.setVisible(true);
 		
+		//Set up JFrame with take photo button
 		JFrame frame2 = new JFrame();
 		JButton button = new JButton("Take Photo");
 		JPanel panel = new JPanel();
@@ -79,8 +84,11 @@ public class CardPhoto {
 		panel.setVisible(true);
 		frame2.pack();
 		frame2.setVisible(true);
+		
+		//Sets the button and frame next to the first frame
 		frame2.setLocation(frame.getX() + frame.getWidth(), frame.getY());
 		
+		//Adds listener to take photo button to take a photo and exit
 		button.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 			    takePhoto(matrix);
@@ -89,7 +97,7 @@ public class CardPhoto {
 			  } 
 			} );
 
-		
+		//Runs until take photo has been clicked
 		while (!exit) {
 
 			// Copy pixels from the Mat to the image
@@ -104,6 +112,11 @@ public class CardPhoto {
 		return image;
 	}
 
+	/**
+	 * <p> Converts a Mat frame to a BufferedImage </p>
+	 * @param in the Mat frame to be converted
+	 * @return the BufferedImage of the converted Mat frame
+	 */
 	private static BufferedImage mat2Img(Mat in) {
 		BufferedImage out;
 		byte[] data = new byte[320 * 240 * (int) in.elemSize()];
@@ -121,12 +134,17 @@ public class CardPhoto {
 		return out;
 	}
 
+	/**
+	 * <p> Saves the current frame to a BufferedImage </p>
+	 * @param mat the Mat frame to be converted to a BufferedImage 
+	 */
 	private static void takePhoto(Mat mat) {
 		image = mat2Img(mat);
 		exit = true;
 		
 	}
 	
+	//TODO
 	public static void displayCard(DBObject contact) {
 		
 	}

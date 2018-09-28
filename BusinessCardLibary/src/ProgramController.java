@@ -40,6 +40,10 @@ public class ProgramController {
 		root.setLevel(Level.OFF);
 	}
 	
+	/**
+	 * <p> The main method, controls the overall application </p>
+	 * @param args unused command line arguments
+	 */
 	public static void main(String[] args) {
 		sc = new Scanner(System.in);
 		
@@ -449,6 +453,10 @@ public class ProgramController {
 		
 	}
 
+	/**
+	 * <p> Uses the CardPhoto class to take a photo of a business card </p>
+	 * @return the photo of the business card
+	 */
 	private static BufferedImage takePhoto() {
         BufferedImage card = cardPhoto.InteractWithUser();
 		return card;
