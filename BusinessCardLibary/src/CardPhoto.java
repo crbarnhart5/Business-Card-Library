@@ -4,13 +4,14 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
-
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,19 +35,24 @@ import com.mongodb.DBObject;
 public class CardPhoto {
 	static BufferedImage image;
 	static boolean exit;
+
 	public static void CardPhoto() {
-		
+
 	}
 
 	/**
-	 * <p> Streams the webcam until the user presses the Take Photo button. Influenced by
-	 * http://jdbates.blogspot.com/2015/01/this-post-is-about-how-to-capture-and.html </p>
+	 * <p>
+	 * Streams the webcam until the user presses the Take Photo button. Influenced
+	 * by
+	 * http://jdbates.blogspot.com/2015/01/this-post-is-about-how-to-capture-and.html
+	 * </p>
+	 * 
 	 * @return the BufferedImage of the business card
 	 */
 	public static BufferedImage InteractWithUser() {
 		Scanner sc = new Scanner(System.in);
 		exit = false;
-		
+
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		// Open the webcam
@@ -62,20 +68,18 @@ public class CardPhoto {
 		// Create a window to display the video
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		
 
 		ImageIcon icon = new ImageIcon(image);
 
 		JLabel label = new JLabel(icon);
-		
+
 		frame.getContentPane().add(label);
-		
+
 		// Resize it to fit the video
 		frame.pack();
 		frame.setVisible(true);
-		
-		//Set up JFrame with take photo button
+
+		// Set up JFrame with take photo button
 		JFrame frame2 = new JFrame();
 		JButton button = new JButton("Take Photo");
 		JPanel panel = new JPanel();
@@ -84,20 +88,20 @@ public class CardPhoto {
 		panel.setVisible(true);
 		frame2.pack();
 		frame2.setVisible(true);
-		
-		//Sets the button and frame next to the first frame
-		frame2.setLocation(frame.getX() + frame.getWidth(), frame.getY());
-		
-		//Adds listener to take photo button to take a photo and exit
-		button.addActionListener(new ActionListener() { 
-			  public void actionPerformed(ActionEvent e) { 
-			    takePhoto(matrix);
-			    frame.dispose();
-			    frame2.dispose();
-			  } 
-			} );
 
-		//Runs until take photo has been clicked
+		// Sets the button and frame next to the first frame
+		frame2.setLocation(frame.getX() + frame.getWidth(), frame.getY());
+
+		// Adds listener to take photo button to take a photo and exit
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				takePhoto(matrix);
+				frame.dispose();
+				frame2.dispose();
+			}
+		});
+
+		// Runs until take photo has been clicked
 		while (!exit) {
 
 			// Copy pixels from the Mat to the image
@@ -113,7 +117,10 @@ public class CardPhoto {
 	}
 
 	/**
-	 * <p> Converts a Mat frame to a BufferedImage </p>
+	 * <p>
+	 * Converts a Mat frame to a BufferedImage
+	 * </p>
+	 * 
 	 * @param in the Mat frame to be converted
 	 * @return the BufferedImage of the converted Mat frame
 	 */
@@ -135,18 +142,39 @@ public class CardPhoto {
 	}
 
 	/**
-	 * <p> Saves the current frame to a BufferedImage </p>
-	 * @param mat the Mat frame to be converted to a BufferedImage 
+	 * <p>
+	 * Saves the current frame to a BufferedImage
+	 * </p>
+	 * 
+	 * @param mat the Mat frame to be converted to a BufferedImage
 	 */
 	private static void takePhoto(Mat mat) {
 		image = mat2Img(mat);
 		exit = true;
-		
-	}
-	
-	//TODO
-	public static void displayCard(DBObject contact) {
-		
+
 	}
 
+	// TODO
+	public static void displayCard(DBObject contact) {
+		byte[] photo = (byte[]) contact.get("card");
+		ByteArrayInputStream bais = new ByteArrayInputStream(photo);
+
+		try {
+			BufferedImage image = ImageIO.read(bais);
+			JFrame frame = new JFrame();
+
+			ImageIcon icon = new ImageIcon(image);
+
+			JLabel label = new JLabel(icon);
+
+			frame.getContentPane().add(label);
+
+			// Resize it to fit the video
+			frame.pack();
+			frame.setVisible(true);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+
+		}
+	}
 }

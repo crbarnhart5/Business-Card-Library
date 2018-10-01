@@ -9,10 +9,14 @@
  */
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
+
 import org.bson.Document;
+import org.bson.types.Binary;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -53,8 +57,8 @@ public class ProgramController {
 		DB database = mongoClient.getDB("contacts");
 		cards = database.getCollection("cards");
 		
-		//interactWithUser();
-		//taketo();
+		interactWithUser();
+		
 		
 		
 		//Close scanner and connection to database
@@ -229,17 +233,33 @@ public class ProgramController {
 		String company = sc.nextLine();
 		System.out.println("Please enter the contact's phone number");
 		String number = sc.nextLine();
-		BufferedImage card = cardPhoto.InteractWithUser();
-
-		//Supplies new information to DBObject
-		query.put("first_name", fName);
-		query.put("last_name", lName);
-		query.put("company", company);
-		query.put("number", number);
-		//add photo
+		BufferedImage card = takePhoto();
 		
-		//Adds contact to database
-		cards.insert(query);
+		try {
+			//Convert BufferedImage to binary
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(card, "jpg", baos );
+			baos.flush();
+			byte[] imageInByte = baos.toByteArray();
+			baos.close();
+			Binary photo = new Binary(imageInByte);
+			
+			
+			
+			//Supplies new information to DBObject
+			query.put("first_name", fName);
+			query.put("last_name", lName);
+			query.put("company", company);
+			query.put("number", number);
+			query.put("card", photo);
+			
+			//Adds contact to database
+			cards.insert(query);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
