@@ -154,19 +154,26 @@ public class CardPhoto {
 
 	}
 
-	// TODO
+	/**
+	 * <p>
+	 * Displays the photo of the business card of the given contact
+	 * </p>
+	 * 
+	 * @param contact the contact whose photo will be displayed
+	 */
 	public static void displayCard(DBObject contact) {
+		//Retrieve image as byte array
 		byte[] photo = (byte[]) contact.get("card");
 		ByteArrayInputStream bais = new ByteArrayInputStream(photo);
-
+		
 		try {
+			//Convert image from byte array to bufferedImage
 			BufferedImage image = ImageIO.read(bais);
+			
+			//Display image
 			JFrame frame = new JFrame();
-
 			ImageIcon icon = new ImageIcon(image);
-
 			JLabel label = new JLabel(icon);
-
 			frame.getContentPane().add(label);
 
 			// Resize it to fit the video
@@ -174,7 +181,6 @@ public class CardPhoto {
 			frame.setVisible(true);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
-
 		}
 	}
 }
